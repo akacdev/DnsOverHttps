@@ -1,0 +1,56 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--Basic Information-->
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <PackageId>DnsOverHttps</PackageId>
+    <Product>DnsOverHttps</Product>
+    <Authors>akac</Authors>
+    <Company>akac</Company>
+    <Description>An async and lightweight C# library for Cloudflare's DNS over HTTPS.</Description>
+    <PackageTags>dns; domain-name-system; domain; dns-over-https; doh; record; resolve; csharp; api; library</PackageTags>
+    <PackageIcon>icon.png</PackageIcon>
+    <PackageReadmeFile>NuGet.md</PackageReadmeFile>
+
+    <!--Version-->
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0</AssemblyVersion>
+    <FileVersion>1.0.0</FileVersion>
+
+    <!--Github-->
+    <PackageProjectUrl>https://github.com/actually-akac/DnsOverHttps</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/actually-akac/DnsOverHttps</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <!--Compiler Options-->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+    <!--Miscellaneous-->
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <RequireLicenseAcceptance>false</RequireLicenseAcceptance>
+    <NeutralLanguage>en</NeutralLanguage>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;1591</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="icon.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="NuGet.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+</Project>
