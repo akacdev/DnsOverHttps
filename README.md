@@ -5,7 +5,7 @@
 </div>
 
 <div align="center">
-  An async and lightweight C# library for Cloudflare's DNS over HTTPS.
+  <b>An async and lightweight C# library for Cloudflare's DNS over HTTPS.</b>
 </div>
 
 ## Usage
