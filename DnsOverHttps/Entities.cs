@@ -103,7 +103,7 @@ namespace DnsOverHttps
     ///     Documentation: <a href="https://www.iana.org/assignments/dns-parameters/dns-parameters.xhtml"></a><br/>
     /// </para>
     /// </summary>
-    public enum ResurceRecordType : byte
+    public enum ResourceRecordType : byte
     {
         Reserved,
         /// <summary>
@@ -301,7 +301,7 @@ namespace DnsOverHttps
         /// The type of DNS record requested.
         /// </summary>
         [JsonPropertyName("type")]
-        public ResurceRecordType Type { get; set; }
+        public ResourceRecordType Type { get; set; }
     }
 
     /// <summary>
@@ -319,7 +319,7 @@ namespace DnsOverHttps
         /// The type of DNS record.
         /// </summary>
         [JsonPropertyName("type")]
-        public int Type { get; set; }
+        public ResourceRecordType Type { get; set; }
 
         /// <summary>
         /// The number of seconds the answer can be stored in cache before it is considered stale.

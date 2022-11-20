@@ -48,9 +48,10 @@ Answer[] aAnswers = await dns.GetAll("reddit.com", "A");
 ```
 
 ## Available Methods
-- Task\<Response> **Resolve**(string name, string type = "A", bool requestDnsSec = false, bool validateDnsSec = false)
-- Task\<Answer> **GetFirst**(string name, string type = "A", bool requestDnsSec = false, bool validateDnsSec = false)
-- Task\<Answer[]> **GetAll**(string name, string type = "A", bool requestDnsSec = false, bool validateDnsSec = false)
+- Task\<Response> **Resolve**(string name, ResourceRecordType type = ResourceRecordType.A, bool requestDnsSec = false, bool validateDnsSec = false)
+- Task\<Response[]> **Resolve**(string name, ResourceRecordType[] types, bool requestDnsSec = false, bool validateDnsSec = false)
+- Task\<Answer[]> **ResolveAll**(string name, ResourceRecordType type = ResourceRecordType.A, bool requestDnsSec = false, bool validateDnsSec = false)
+- Task\<Answer> **ResolveFirst**(string name, ResourceRecordType type = ResourceRecordType.A, bool requestDnsSec = false, bool validateDnsSec = false)
 
 ## Resources
 - Cloudflare: https://cloudflare.com
