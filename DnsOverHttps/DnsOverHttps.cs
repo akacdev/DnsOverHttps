@@ -56,12 +56,13 @@ namespace DnsOverHttps
             HttpResponseMessage res = await Client.SendAsync(req);
 
             Response response = await res.Deseralize<Response>();
-            if (res.StatusCode != HttpStatusCode.OK || !string.IsNullOrEmpty(response.Error) || !string.IsNullOrEmpty(response.Comment))
+
+            if (res.StatusCode != HttpStatusCode.OK || !string.IsNullOrEmpty(response.Error) || response.Comments is not null)
             {
                 string message =
                     $"Failed to query type {type} of '{name}', received HTTP status code {res.StatusCode}." +
                     (string.IsNullOrEmpty(response.Error) ? "" : $"\nError: {response.Error}") +
-                    (string.IsNullOrEmpty(response.Comment) ? "" : $"\nComment: {response.Comment}");
+                    (response.Comments is null ? "" : $"\nComments: {string.Join(", ", response.Comments)}");
 
                 throw new DnsOverHttpsException(message, response);
             }
@@ -114,7 +115,7 @@ namespace DnsOverHttps
         public async Task<Answer> ResolveFirst(string name, ResourceRecordType type = ResourceRecordType.A, bool requestDnsSec = false, bool validateDnsSec = false)
         {
             Response res = await Resolve(name, type, requestDnsSec, validateDnsSec);
-            return res.Answers?.FirstOrDefault();
+            return res.Answers?.FirstOrDefault(x => x.Type == type);
         }
 
         /// <summary>
@@ -133,7 +134,7 @@ namespace DnsOverHttps
         public async Task<Answer[]> ResolveAll(string name, ResourceRecordType type = ResourceRecordType.A, bool requestDnsSec = false, bool validateDnsSec = false)
         {
             Response res = await Resolve(name, type, requestDnsSec, validateDnsSec);
-            return res.Answers;
+            return res.Answers.Where(x => x.Type == ResourceRecordType.A).ToArray();
         }
     }
 }

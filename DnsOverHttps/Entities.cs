@@ -283,7 +283,7 @@ namespace DnsOverHttps
         /// </para>
         /// </summary>
         [JsonPropertyName("Comment")]
-        public string Comment { get; set; }
+        public string[] Comments { get; set; }
     }
 
     /// <summary>   
