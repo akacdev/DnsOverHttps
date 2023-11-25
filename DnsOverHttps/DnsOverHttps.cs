@@ -46,23 +46,23 @@ namespace DnsOverHttps
         {
             if (string.IsNullOrEmpty(name)) throw new ArgumentNullException(nameof(name), "Name is null or empty.");
 
-            string url =
-                $"?name={name.UrlEncode()}" +
-                (type == ResourceRecordType.A ? "" : $"&type={type.ToString().UrlEncode()}") +
-                (requestDnsSec == false ? "" : $"&do=1") +
-                (validateDnsSec == false ? "" : $"&cd=1");
+            string url = string.Concat(
+                $"?name={name.UrlEncode()}",
+                type == ResourceRecordType.A ? "" : $"&type={type.ToString().UrlEncode()}",
+                requestDnsSec == false ? "" : $"&do=1",
+                validateDnsSec == false ? "" : $"&cd=1");
 
-            HttpRequestMessage req = new(HttpMethod.Get, url);
-            HttpResponseMessage res = await Client.SendAsync(req);
+            using HttpRequestMessage req = new(HttpMethod.Get, url);
+            using HttpResponseMessage res = await Client.SendAsync(req);
 
             Response response = await res.Deseralize<Response>();
-
+            
             if (res.StatusCode != HttpStatusCode.OK || !string.IsNullOrEmpty(response.Error) || response.Comments is not null)
             {
-                string message =
-                    $"Failed to query type {type} of '{name}', received HTTP status code {res.StatusCode}." +
-                    (string.IsNullOrEmpty(response.Error) ? "" : $"\nError: {response.Error}") +
-                    (response.Comments is null ? "" : $"\nComments: {string.Join(", ", response.Comments)}");
+                string message = string.Concat(
+                    $"Failed to query type {type} of \"{name}\", received HTTP status code {res.StatusCode}.",
+                    string.IsNullOrEmpty(response.Error) ? "" : $"\nError: {response.Error}",
+                    response.Comments is null ? "" : $"\nComments: {string.Join(", ", response.Comments)}");
 
                 throw new DnsOverHttpsException(message, response);
             }
@@ -112,9 +112,10 @@ namespace DnsOverHttps
         /// <returns></returns>
         /// <exception cref="DnsOverHttpsException"></exception>
         /// <exception cref="ArgumentNullException"></exception>
-        public async Task<Answer> ResolveFirst(string name, ResourceRecordType type = ResourceRecordType.A, bool requestDnsSec = false, bool validateDnsSec = false)
+        public async Task<Answer?> ResolveFirst(string name, ResourceRecordType type = ResourceRecordType.A, bool requestDnsSec = false, bool validateDnsSec = false)
         {
             Response res = await Resolve(name, type, requestDnsSec, validateDnsSec);
+
             return res.Answers?.FirstOrDefault(x => x.Type == type);
         }
 
@@ -134,6 +135,7 @@ namespace DnsOverHttps
         public async Task<Answer[]> ResolveAll(string name, ResourceRecordType type = ResourceRecordType.A, bool requestDnsSec = false, bool validateDnsSec = false)
         {
             Response res = await Resolve(name, type, requestDnsSec, validateDnsSec);
+
             return res.Answers.Where(x => x.Type == ResourceRecordType.A).ToArray();
         }
     }

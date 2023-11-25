@@ -7,9 +7,12 @@ namespace DnsOverHttps
     /// </summary>
     public class DnsOverHttpsException : Exception
     {
+        /// <summary>
+        /// The DNS response that caused this exception.
+        /// </summary>
         public Response Response { get; set; }
 
         public DnsOverHttpsException(string message) : base(message) { }
-        public DnsOverHttpsException(string message, Response response) : base(message) { Response = response; }
+        public DnsOverHttpsException(string message, Response res) : base(message) { Response = res; }
     }
 }

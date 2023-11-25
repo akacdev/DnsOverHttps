@@ -206,7 +206,7 @@ namespace DnsOverHttps
     /// <summary>
     /// The result of a DNS over HTTPS query.
     /// </summary>
-    public class Response
+    public struct Response
     {
         /// <summary>
         /// A DNS response code.
@@ -289,7 +289,7 @@ namespace DnsOverHttps
     /// <summary>   
     /// A DNS question sent by the client.
     /// </summary>
-    public class Question
+    public struct Question
     {
         /// <summary>
         /// The FQDN record name requested.
@@ -307,7 +307,7 @@ namespace DnsOverHttps
     /// <summary>
     /// A DNS answer sent by the server.
     /// </summary>
-    public class Answer
+    public struct Answer
     {
         /// <summary>
         /// The record owner.

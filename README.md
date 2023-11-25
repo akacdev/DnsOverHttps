@@ -5,13 +5,15 @@
 </div>
 
 <div align="center">
-  <b>An async and lightweight C# library for Cloudflare's DNS over HTTPS.</b>
+  An async and lightweight C# library for Cloudflare's DNS over HTTPS.
 </div>
 
 ## Usage
-Provides an easy interface for interacting with Cloudflare's DNS over HTTPS endpoints. Learn more about it [here](https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https/).
+This library provides an easy interface for interacting with Cloudflare's DNS over HTTPS endpoints.
 
-To get started, add the library into your solution with either the `NuGet Package Manager` or the `dotnet` CLI.
+DoH is a protocol that enhances the privacy and security of DNS queries by encrypting them using HTTPS. This helps prevent unauthorized access or tampering of DNS data during transmission. Learn more about it [here](https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https/).
+
+To get started, import the library into your solution with either the `NuGet Package Manager` or the `dotnet` CLI.
 ```rust
 dotnet add package DnsOverHttps
 ```
@@ -23,15 +25,19 @@ using DnsOverHttps;
 
 Need more examples? Under the `Example` directory you can find a working demo project that implements this library.
 
-## Features
-- Built for **.NET 6** and **.NET 7**
+## Properties
+- Built for **.NET 8**, **.NET 7** and **.NET 6**
 - Fully **async**
-- Deep coverage of the API
 - Extensive **XML documentation**
-- **No external dependencies** (uses integrated HTTP and JSON)
-- **Custom exceptions** (`DnsOverHttpsException`) for advanced catching
+- **No external dependencies** (makes use of built-in `HttpClient` and `JsonSerializer`)
+- **Custom exceptions** (`DnsOverHttpsException`) for easy debugging
 - Example project to demonstrate all capabilities of the library
-- Execute DNS queries over HTTPS of any type
+
+## Features
+- Resolve one or all DNS records under a hostname
+- Ask for DNSSEC validation
+- Query in parallel
+- Specify advanced parameters
 
 ## Code Samples
 
@@ -42,26 +48,20 @@ DnsOverHttpsClient dns = new();
 
 ### Resolving A DNS records including DNSSEC
 ```csharp
-Response response = await dns.Resolve("discord.com", "A", true, true);
+Response response = await Client.Resolve("discord.com", ResourceRecordType.A, true, true);
 ```
 
 ### Using helper methods to return the first or all answers
 ```csharp
-Answer nsAnswer = await dns.GetFirst("example.com", "NS");
-Answer[] aAnswers = await dns.GetAll("reddit.com", "A");
+Answer? nsAnswer = await Client.ResolveFirst("example.com", ResourceRecordType.NS);
+Answer[] aAnswers = await Client.ResolveAll("reddit.com", ResourceRecordType.A);
 ```
-
-## Available Methods
-- Task\<Response> **Resolve**(string name, ResourceRecordType type = ResourceRecordType.A, bool requestDnsSec = false, bool validateDnsSec = false)
-- Task\<Response[]> **Resolve**(string name, ResourceRecordType[] types, bool requestDnsSec = false, bool validateDnsSec = false)
-- Task\<Answer[]> **ResolveAll**(string name, ResourceRecordType type = ResourceRecordType.A, bool requestDnsSec = false, bool validateDnsSec = false)
-- Task\<Answer> **ResolveFirst**(string name, ResourceRecordType type = ResourceRecordType.A, bool requestDnsSec = false, bool validateDnsSec = false)
 
 ## Resources
 - Cloudflare: https://cloudflare.com
 - 1.1.1.1: https://1.1.1.1
 - Introduction: https://developers.cloudflare.com/1.1.1.1/encryption/dns-over-https
 
-*This is a community-ran library. Not affiliated with Cloudflare.*
+*This is a community-ran library. Not affiliated with Cloudflare, Inc.*
 
 *Icon made by **Freepik** at [Flaticon](https://www.flaticon.com).*
