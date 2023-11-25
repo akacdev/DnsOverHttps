@@ -1,0 +1,60 @@
+name: Build and Release
+
+env:
+  DOTNET_VERSION: '8.x'
+  NUGET_SOURCE_URL: 'https://api.nuget.org/v3/index.json'
+  BUILD_DIRECTORY: '${{ github.workspace }}/build'
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Get Version
+      id: get_version
+      run: |
+          echo "tag=${GITHUB_REF_NAME}" >> $GITHUB_OUTPUT
+          echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+    
+    - name: Get Project Metadata
+      id: get_project_meta
+      run: |
+          name=$(echo '${{ github.repository }}' | cut -d '/' -f 2)
+          
+          echo "name=${name}" >> $GITHUB_OUTPUT
+          echo "path=${name}/${name}.csproj" >> $GITHUB_OUTPUT
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3.2.0
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+
+    - name: Restore Packages
+      run: dotnet restore ${{ steps.get_project_meta.outputs.path }}
+      
+    - name: Build Project
+      run: dotnet build ${{ steps.get_project_meta.outputs.path }} /p:ContinuousIntegrationBuild=true --no-restore --configuration Release
+
+    - name: Pack Project
+      run: dotnet pack ${{ steps.get_project_meta.outputs.path }} --no-restore --no-build --configuration Release --include-symbols -p:PackageVersion=${{ steps.get_version.outputs.version }} --output ${{ env.BUILD_DIRECTORY }}
+
+    - name: Push Package
+      env:
+        NUGET_AUTH_TOKEN: ${{ secrets.NUGET_AUTH_TOKEN }}
+      run: dotnet nuget push ${{ env.BUILD_DIRECTORY }}/*.nupkg -k $NUGET_AUTH_TOKEN -s ${{ env.NUGET_SOURCE_URL }}
+
+    - name: Create Release
+      uses: softprops/action-gh-release@v1
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        name: ${{ steps.get_version.outputs.tag }}
+        body: ${{ github.event.head_commit.message }}
+        files: '${{ env.BUILD_DIRECTORY }}/*'
