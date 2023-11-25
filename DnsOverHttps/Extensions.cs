@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DnsOverHttps
 {
-    public static class Extensions
+    internal static class Extensions
     {
         public static string UrlEncode(this string value) => WebUtility.UrlEncode(value);
 

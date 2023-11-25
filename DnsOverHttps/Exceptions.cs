@@ -13,6 +13,9 @@ namespace DnsOverHttps
         public Response Response { get; set; }
 
         public DnsOverHttpsException(string message) : base(message) { }
-        public DnsOverHttpsException(string message, Response res) : base(message) { Response = res; }
+        public DnsOverHttpsException(string message, Response res) : base(message)
+        {
+            Response = res;
+        }
     }
 }
