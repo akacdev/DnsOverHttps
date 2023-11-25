@@ -48,13 +48,13 @@ DnsOverHttpsClient dns = new();
 
 ### Resolving A DNS records including DNSSEC
 ```csharp
-Response response = await Client.Resolve("discord.com", ResourceRecordType.A, true, true);
+Response response = await dns.Resolve("discord.com", ResourceRecordType.A, true, true);
 ```
 
 ### Using helper methods to return the first or all answers
 ```csharp
-Answer? nsAnswer = await Client.ResolveFirst("example.com", ResourceRecordType.NS);
-Answer[] aAnswers = await Client.ResolveAll("reddit.com", ResourceRecordType.A);
+Answer? nsAnswer = await dns.ResolveFirst("example.com", ResourceRecordType.NS);
+Answer[] aAnswers = await dns.ResolveAll("reddit.com", ResourceRecordType.A);
 ```
 
 ## Resources
