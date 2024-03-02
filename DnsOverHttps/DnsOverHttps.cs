@@ -136,7 +136,7 @@ namespace DnsOverHttps
         {
             Response res = await Resolve(name, type, requestDnsSec, validateDnsSec);
 
-            return res.Answers.Where(x => x.Type == ResourceRecordType.A).ToArray();
+            return res.Answers.Where(x => x.Type == type).ToArray();
         }
     }
 }
